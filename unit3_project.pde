@@ -12,6 +12,7 @@ color black = #000000;
 float sliderY;
 float thickness;
 float circleSize;
+float imageSize;
 color selectedColor;
 boolean girlOn;
 
@@ -23,6 +24,7 @@ void setup(){
   sliderY = 450;
   thickness = 2;
   circleSize = 10;
+  imageSize = 160;
   girlOn = false;
 }
 
@@ -74,6 +76,7 @@ void draw(){
   circle(100, sliderY, 10);
   noStroke();
   circleSize = map(sliderY, 405, 510, -1, 80);
+  imageSize = map(sliderY, 405, 510, 100, 300);
   circle(100, 565, circleSize);
   stroke(0);
   
@@ -84,13 +87,19 @@ void draw(){
   text("New", 77, 650);
   stroke(0);
   
-  // enjoy your drawing
-  fill(255, 179, 57);
-  rect(20, 675, 160, 100);
-  textSize(30);
-  fill(90, 56, 0);
-  text("Enjoy your", 34, 715);
-  text("drawing", 46, 755);
+  // save button
+  colorButton(black, 20, 675, 160, 35);
+  textSize(25);
+  fill(255);
+  text("Save", 77, 700);
+  stroke(0);
+  
+  // load button
+  colorButton(black, 20, 725, 160, 35);
+  textSize(25);
+  fill(255);
+  text("Load", 77, 750);
+  stroke(0);
 }
 
 void mouseDragged(){
@@ -103,7 +112,7 @@ void mouseDragged(){
     }
     else{
       // image pattern
-      image(girl, mouseX, mouseY, 160, 130);
+      image(girl, mouseX, mouseY, imageSize, imageSize*130/160);
     }
   }
   stroke(0);
@@ -152,9 +161,19 @@ void mouseReleased(){
     fill(255);
     noStroke();
     rect(200, 0, 800, 800);
-  }
+    selectedColor = black;
+    strokeWeight(2);
+  }  
   fill(0);
   stroke(0);
+  //save
+  if(mouseX > 20 && mouseX < 180 && mouseY > 675 && mouseY < 710){
+    selectOutput("Choose a name for your image", "saveImage");
+  } 
+  //load
+  if(mouseX > 20 && mouseX < 180 && mouseY > 725 && mouseY < 760){
+    selectInput("Pick an image", "openImage");
+  }  
   
 }
 
@@ -180,10 +199,6 @@ void girlOnOff(){
     stroke(green);
     strokeWeight(5);
   }
-  else if(girlOn == true){
-    stroke(0);
-    strokeWeight(2);
-  }
   else{
     stroke(0);
     strokeWeight(2);
@@ -194,6 +209,23 @@ void colorButton(color choose, int x, int y, int w, int h){
   tactile(x, y, w, h);
   fill(choose);
   rect(x, y, w, h);
+}
+
+void saveImage(File f){
+  if(f!=null){
+    PImage canvas;
+    canvas = get(200, 0, width-200, height);
+    canvas.save(f.getAbsolutePath());
+    
+  }
+}
+void openImage(File f){
+  if(f!=null){
+    PImage pic;
+    pic = loadImage(f.getPath());
+    image(pic, 200, 0, width-200, height);
+    
+  }
 }
 
   
