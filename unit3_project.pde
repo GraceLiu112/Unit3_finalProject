@@ -1,5 +1,6 @@
 // declare variables
 PImage girl;
+PImage cat;
 color red = #FF0000;
 color pink = #FF7EAB;
 color purple = #D074FF;
@@ -15,17 +16,20 @@ float circleSize;
 float imageSize;
 color selectedColor;
 boolean girlOn;
+boolean catOn;
 
 void setup(){
   size(1000, 800);
   background(255);
   strokeWeight(2);
   girl = loadImage("girlchild.png");
+  cat = loadImage("cat.png");
   sliderY = 450;
   thickness = 2;
   circleSize = 10;
   imageSize = 160;
   girlOn = false;
+  catOn = false;
 }
 
 void draw(){
@@ -35,10 +39,15 @@ void draw(){
   
   // Stamp tool 
   girlOnOff();
-  tactile (20, 20, 160, 130);
+  tactile (5, 20, 95, 130);
   fill(255);
-  rect(20, 20, 160, 130);
-  image(girl, 20, 20, 160, 130);
+  rect(5, 20, 95, 130);
+  image(girl, -28, 20, 160, 130);
+  catOnOff();
+  tactile (103, 20, 93, 130);
+  fill(255);
+  rect(103, 20, 93, 130);
+  image(cat, 89, 40, 130, 100);
   stroke(0);
   strokeWeight(2);
   
@@ -104,15 +113,19 @@ void draw(){
 
 void mouseDragged(){
   if(mouseY > 0 && mouseY < 800 && mouseX > 200 && mouseX < 1000){
-    if (girlOn == false){
+    if (girlOn == false && catOn == false){
       // squiggly line
       strokeWeight(thickness);
       stroke(selectedColor);
       line(pmouseX, pmouseY, mouseX, mouseY);
     }
-    else{
+    else if(girlOn == true){
       // image pattern
       image(girl, mouseX, mouseY, imageSize, imageSize*130/160);
+    }
+    else if(catOn == true){
+      // image pattern
+      image(cat, mouseX, mouseY, imageSize, imageSize*130/160);
     }
   }
   stroke(0);
@@ -152,8 +165,15 @@ void mouseReleased(){
   }
   
   // girl button
-  if(mouseX > 20 && mouseX < 180 && mouseY > 20 && mouseY < 150){
+  if(mouseX > 5 && mouseX < 100 && mouseY > 20 && mouseY < 150){
     girlOn = !girlOn;
+    catOn = false;
+  }
+  
+  //cat button
+  if(mouseX > 103 && mouseX < 196 && mouseY > 20 && mouseY < 150){
+    catOn = !catOn;
+    girlOn = false;
   }
   
   // new button
@@ -196,6 +216,17 @@ void tactile (int x, int y, int w, int h) {
 
 void girlOnOff(){
   if(girlOn == true){
+    stroke(green);
+    strokeWeight(5);
+  }
+  else{
+    stroke(0);
+    strokeWeight(2);
+  }
+}
+
+void catOnOff(){
+  if(catOn == true){
     stroke(green);
     strokeWeight(5);
   }
